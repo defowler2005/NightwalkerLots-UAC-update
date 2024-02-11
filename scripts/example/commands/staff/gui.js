@@ -37,6 +37,11 @@ const moduleDefs_prots = [
         toggle: ['§cOFF', '§aON']
     },
     {
+        mname: 'Anti creative',
+        name: 'actoggle',
+        toggle: ['§cOFF', '§aON']
+    },
+    {
         mname: 'Mining Detection',
         name: 'mdmtoggle',
         toggle: ['§cOFF', '§aON']
@@ -61,12 +66,12 @@ const moduleDefs_util = [
     },
     {
         mname: 'Anti CLog',
-        name: 'clmdummy',
+        name: 'clmtoggle',
         toggle: ['§cOFF', '§aKILL', '§aCLEAR']
     },
     {
         mname: 'Anti ChatSpam',
-        name: 'acsdummy',
+        name: 'acstoggle',
         toggle: ['§cOFF', '§aON']
     },
     {

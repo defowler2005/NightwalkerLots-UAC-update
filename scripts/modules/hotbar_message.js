@@ -21,8 +21,8 @@ function hotbar_message(player) {
     try {
         const playerDB = new Database(player);
         const serverDB = new Database();
-        let message_type = playerDB.get('hmmtoggle') || 0;
-        let hmm_toggle = serverDB.get('hmmtoggle') || 0;
+        let message_type = playerDB.get('hmmtoggle');
+        let hmm_toggle = serverDB.get('hmmtoggle');
         let is_frozen = player.hasTag('fzplr');
         let in_vanish = getGamemode(player, 'spectator');
         let plr_suicide = scoreTest(player, 'suicide');
