@@ -794,7 +794,7 @@ const guiScheme = {
                 ? v.toggle(`${module.mname}`, !!vl)
                 : v.dropdown(`${module.mname}`, module.toggle, vl)
         }
-        mdmtoggle
+
         v.show(plr).then(v => {
             if (v.canceled) return guiScheme.main(plr)
             const newValues = v.formValues.map(v => Number(v))

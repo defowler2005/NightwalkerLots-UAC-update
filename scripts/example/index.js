@@ -17,7 +17,6 @@ import { Check_Packet_Behavior } from '../modules/bad_packet.js';
 //game resource dependancies
 import { world as World, system } from "@minecraft/server";
 import { tellrawStaff, tp, tellrawServer, TellRB, getGamemode } from '../library/utils/prototype.js';
-import { setScore } from '../library/utils/score_testing.js';
 import { world, Player } from '@minecraft/server';
 import { Database } from '../library/Minecraft.js';
 import '../library/miscellaneous/chatrank.js';
@@ -59,9 +58,6 @@ function worldBorder(player) {
 ░░███████████░░███░░███░░████████░░░░░░░
 */
 
-let SpawnX = scoreTest('worlddum', 'Worldx');
-let SpawnZ = scoreTest('worlddum', 'Worldz');
-let SpawnY = scoreTest('worlddum', 'Worldy');
 let on_tick = 0;
 
 system.runInterval(() => {
@@ -85,11 +81,12 @@ system.runInterval(() => {
                 const name = player.getName();
                 worldBorder(player);
                 const unbantoggle = new Database();
-                if (unbantoggle.get('ubwtoggle') === 0) {
+                //if (unbantoggle.get('ubwtoggle') === 0) {
                     playerbans(player);
-                }
+                //}
                 hotbar_message(player);
                 movement_check(player);
+                creative_flag(player)
                 afk_kick(player);
                 if (opabuse_bool) { op_abuse(player) }
                 //Namespoof patch provided by the Paradox Team.
@@ -204,17 +201,26 @@ world.afterEvents.playerSpawn.subscribe((data) => {
     let player = data.player;
     let { x, y, z } = player.location;
 
-    if (!player.hasTag('seen_gui')) {
-        waitMove.set(player, [x, y, z]);
-    }
-    const unbantoggle = new Database();
-    if (unbantoggle.get('ubwtoggle') === 0) {
-        playerbans(player);
-    }
-});
+    try {
+        const unbantoggle = new Database();
+        if (unbantoggle.get('ubwtoggle') === 0) {
+            playerbans(player);
+        }
 
-world.afterEvents.playerLeave.subscribe((data) => {
-
+        const playersNumberDB = new Database();
+        if (!player.hasTag('welcomed')) {
+            let playersNumber = parseInt(playersNumberDB.get('playersNumber')) + 1;
+            system.runTimeout(() => { player.runCommand('playsound random.levelup @s ~~~ 2'); }, 50)
+            tellrawServer(`§¶§cUAC §b► §d${player.name} §¶§bis new! We're now at §6${playersNumber} §bmembers.`);
+            playersNumberDB.set('playersNumber', playersNumber);
+            player.addTag('welcomed');
+            if (!player.hasTag('seen_gui')) {
+                waitMove.set(player, [x, y, z]);
+            }
+        };
+    } catch (error) {
+        console.error("Error:", error);
+    }
 });
 
 //  chat filter example code.

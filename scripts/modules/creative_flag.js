@@ -5,7 +5,7 @@ import { getGamemode, tellrawServer } from "../library/utils/prototype.js";
 /**
  * 
  * @param {Player} player 
- * @returns {Void}
+ * @returns {void}
  */
 function creative_flag(player) {
     const actoggle = new Database();
@@ -15,20 +15,20 @@ function creative_flag(player) {
 
         switch (creative_flags) {
             case 0:
-                tellrawServer(`${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c1§7/§24§7]`);
+                tellrawServer(`§¶§cUAC ► §d${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c1§7/§24§7]`);
                 break;
             case 1:
-                tellrawServer(`${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c2§7/§24§7]`);
+                tellrawServer(`§¶§cUAC ► §d${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c2§7/§24§7]`);
                 break;
             case 2:
-                tellrawServer(`${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c3§7/§24§7]`);
+                tellrawServer(`§¶§cUAC ► §d${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c3§7/§24§7]`);
                 break;
             case 3:
-                tellrawServer(`${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c4§7/§24§7]`);
+                tellrawServer(`§¶§cUAC ► §d${player.name} §¶§bhas been flagged for §cCREATIVE MODE §7[§c4§7/§24§7]`);
                 break;
             case 4:
-                player.addTag('creativeBan')
-                tellrawServer(`§¶§cUAC ► §d ${player.name}§b's §¶§cgameplay has been restricted due to changing gamemodes`);
+                player.addTag('creativeBan');
+                tellrawServer(`§¶§cUAC ► §d${player.name}§b's §¶§cgameplay has been restricted due to changing gamemodes`);
                 break;
             default:
                 break;
