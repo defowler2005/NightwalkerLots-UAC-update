@@ -2,10 +2,8 @@ import { Player, system, world } from '@minecraft/server';
 import { Database, Server } from '../../../library/Minecraft.js';
 import { ActionFormData, ModalFormData } from '@minecraft/server-ui';
 import { setScore } from '../../../library/utils/score_testing.js';
-import scoreboard from "../../../library/scoreboard.js"
 import { tellrawStaff, getGamemode } from '../../../library/utils/prototype.js';
-/** @type {typeof scoreboard.objective.for} */
-const obj = scoreboard.objective.for.bind(scoreboard.objective)
+const obj = 'UNDEFINED.'
 
 function scoreTest(target, objective) {
     try {
@@ -187,13 +185,14 @@ const itembanDefs = [
     { mname: 'Trident', obj: 'BNTD', name: 'BNMTDummy' }
 ]
 const oreBanDefs = [
-    { mname: 'Diamond', obj: 'diamondmd', name: 'mdmtoggledummy' },
-    { mname: 'Emerald', obj: 'emeraldmd', name: 'mdmtoggledummy' },
-    { mname: 'Gold', obj: 'goldmd', name: 'mdmtoggledummy' },
-    { mname: 'Iron', obj: 'ironmd', name: 'mdmtoggledummy' },
-    { mname: 'Lapis', obj: 'lapizmd', name: 'mdmtoggledummy' },
-    { mname: 'Netherite', obj: 'scrapmd', name: 'mdmtoggledummy' }
-]
+    { mname: 'Diamond', obj: 'diamondmd' },
+    { mname: 'Emerald', obj: 'emeraldmd' },
+    { mname: 'Gold', obj: 'goldmd' },
+    { mname: 'Iron', obj: 'ironmd' },
+    { mname: 'Lapis', obj: 'lapizmd' },
+    { mname: 'Netherite', obj: 'scrapmd' }
+];
+
 const kitDefs = [
     { mname: 'Netherite', structure: 'AdminNether' },
     { mname: 'ULegitNetherite', structure: 'AdminUnbreakableNetherlegit' },
@@ -204,13 +203,14 @@ const kitDefs = [
     { mname: 'Iron', structure: 'AdminIron' },
     { mname: 'ULegitIron', structure: 'AdminUnbreakableironlegit' },
     { mname: 'U32kIron', structure: 'AdminUnbreakableiron32k' },
-]
+];
+
 const particleDefs = [
     { mname: 'Explode', fn: 'explode' },
     { mname: 'Nether Poof', fn: 'nether_poof_small' },
     { mname: 'Nether Poof Small', fn: 'nether_poof' },
     { mname: 'Totem Poof', fn: 'totem_poof' },
-]
+];
 
 /** @type { (plr: Player, module: typeof moduleDefs_prots[number], newValue?: number) => void } */
 
@@ -852,22 +852,21 @@ const guiScheme = {
 
         /** @type { number[] } */
         const values = []
-
+        const itembanDB = new Database();
         for (let itemban of itembanDefs) {
-            const vl = obj(itemban.obj).dummies.get(itemban.name)
+            const vl = itembanDB.get(itemban.name);
             values.push(vl)
             v.toggle(itemban.mname, !!vl)
         }
 
         v.show(plr).then(v => {
-            if (v.canceled) return guiScheme.main(plr)
+            if (v.canceled) return guiScheme.main(plr);
 
             const newValues = v.formValues.map(v => Number(v))
             for (let i = 0, m = newValues.length, a, b; (a = values[i], b = newValues[i], i < m); i++) {
                 if (a != b) {
                     const itemban = itembanDefs[i]
-                    let objdata = obj(itemban.obj).dummies
-                    objdata.set(itemban.name, b)
+                    itembanDB.set(itemban.name, b)
                     tellrawStaff(`§¶§cUAC STAFF ► §bPlayer §d${plr.name}§b has ${b ? '§aenabled' : '§cdisabled'}§r §eItemBan/${itemban.mname}§r`)
                 }
             }
