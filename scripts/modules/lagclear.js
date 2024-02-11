@@ -11,7 +11,7 @@ system.runInterval(() => {
         //console.warn(`Ticks passed: ${tickPassed}`);
         //console.warn(`Entity count: ${entitycount}`);
         const clearLag = new Database();
-        if (entitycount >= 145 && clearLag.get('ltmtoggledummy') === 1) {
+        if (entitycount >= 145 && clearLag.get('ltmtoggle') === 1) {
             tickPassed++;
 
             switch (tickPassed) {

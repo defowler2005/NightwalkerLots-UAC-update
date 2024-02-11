@@ -1,4 +1,5 @@
 import { Server } from '../../../library/Minecraft.js';
+
 const registerInformation = {
     cancelMessage: true,
     name: 'help',
@@ -14,43 +15,52 @@ const registerInformation = {
 Server.command.register(registerInformation, (data, args) => {
     try {
         const sender = data.sender;
-        //const name = sender.getName();
         const cmdList = Server.command.getAll();
-        const cmdstaff = Server.command.getAllStaff();
-        const sftforplayer = Server.command.getAllStaffMng();
-
         const plrcmd = cmdList.join(', ');
-        const stfcmd = cmdstaff.join(', ');
-        const sftmng = sftforplayer.join(', ');
 
-
-
-        console.warn(cmdList);
-        //sender.tellraw(`§bCustom Command prefix§f: §a${Server.command.prefix}\n§bType §a${Server.command.prefix}help §f[command name] §bfor more information on that command!\n§bCustom Command List: §l§c${cmdList.join(', ')}`);
         if (!args[0]) {
             if (sender.hasTag('staffstatus')) {
-                if (!sender.hasTag('helptemp')) { } else { sender.runCommandAsync(`tag @s add helptemp`); }
-                sender.runCommandAsync(`function UAC/help/all-commands`);
-                sender.tellraw(`§bType §a${Server.command.prefix}help §f[command name] §bfor more information on that command!\n§bPlayer Command List: §l§c${plrcmd} §r\n§bStaff Command List: §l§c${stfcmd}§r\n§bStaff Commands for Player Management: §l§c${sftmng}`);
-                sender.runCommandAsync(`tag @s remove helptemp`);
+                let staffUtilityCommands = `\n§c==== Staff Utility Commands ====\n`;
+                staffUtilityCommands += `§b► Vanish   §2- §a${Server.command.prefix}vanish      §b► Staff GUI §2- §a${Server.command.prefix}gui\n`;
+                staffUtilityCommands += `§b► AutoTotem  §2- §a${Server.command.prefix}autototem   §b► UAC Credits §2- §a${Server.command.prefix}credit\n`;
+                staffUtilityCommands += `§b► FakeLeave  §2- §a${Server.command.prefix}fakeleave   §b► Godmode §2- §a${Server.command.prefix}tgm\n`;
+                staffUtilityCommands += `§b► Clear Lag §2- §a${Server.command.prefix}lagclear      §b► Clear Chat §2- §a${Server.command.prefix}clearchat\n`;
+                staffUtilityCommands += `§b► Clear Area §2- §a${Server.command.prefix}cleararea    §b► Give Kit §2- /function KIT/\n`;
+                staffUtilityCommands += `\n§c==== Player Utility Commands §7-- §2§a${Server.command.prefix}(§6command_name§2)  §c====\n`;
+                staffUtilityCommands += `§b► Smite §2- smite    §b► Echest Wipe §2- echestwipe\n`;
+                staffUtilityCommands += `§b► mayfly §2- mayfly    §b► Freeze §2- freeze_player\n`;
+                staffUtilityCommands += `§b► Stats §2- stats    §b► Warn: §2- warn\n`;
+                staffUtilityCommands += `§b► Warn Reset §2- warnreset    §b► Punish §2- punish\n`;
+                staffUtilityCommands += `§b► Ban       §2- /tag (player) add Ban\n`;
+                staffUtilityCommands += `§b► Unban SoftBan  §2- /execute as (player) run function§a${Server.command.prefix}unban\n`;
+                staffUtilityCommands += `§b► Unban HardBan  §2- §a${Server.command.prefix}unban_window\n`;
+                staffUtilityCommands += `\n§c==== Status Commands ====\n`;
+                staffUtilityCommands += `§b► Modules   §2- §a${Server.command.prefix}modulecheck       §b► Toggle Modules §2- /function toggle\n`;
+                staffUtilityCommands += `§b► Itembans  §2- §a${Server.command.prefix}itembancheck      §b► Toggle Banned Items §2- /function banitem\n`;
+                staffUtilityCommands += `§b► Ore Alerts§2- §a${Server.command.prefix}ore_alert_check   §b► Toggle WorldBorder Size §2- /function worldborder\n`;
+
+                return sender.tellraw(staffUtilityCommands);
             } else {
                 return sender.tellraw(`§bType §a${Server.command.prefix}help §f[command name] §bfor more information on that command!\n§bPlayer Command List: §l§c${plrcmd}`);
             }
         }
-        const cmdInfo = Server.command.getRegistration(args[0]);
-        if (!cmdInfo && args[0])
+
+        const commandName = args[0];
+        const cmdInfo = Server.command.getRegistration(commandName);
+        
+        if (!cmdInfo) {
             return sender.tellraw("§cI couldn't find the command...");
+        }
+
         let string = `\n§eCommand§f: §a${Server.command.prefix}§l§c${cmdInfo.name}§r\n`;
-        if (cmdInfo.aliases)
-            string += `§eAliases§f: §c${cmdInfo.aliases.join('§r, ')}§r\n`;
-        if (cmdInfo.description)
-            string += `§eDescription§f: ${cmdInfo.description}\n`;
-        if (cmdInfo.usage)
-            string += `§eUsage§f: §a${Server.command.prefix}§f${cmdInfo.name} ${cmdInfo.usage}\n`;
-        if (cmdInfo.example)
-            string += `§eExample§f: §a${Server.command.prefix}§f${cmdInfo.example.join(`\n${Server.command.prefix}§f`)}`;
+        if (cmdInfo.aliases) string += `§eAliases§f: §c${cmdInfo.aliases.join('§r, ')}§r\n`;
+        if (cmdInfo.description) string += `§eDescription§f: ${cmdInfo.description}\n`;
+        if (cmdInfo.usage) string += `§eUsage§f: §a${Server.command.prefix}§f${cmdInfo.name} ${cmdInfo.usage}\n`;
+        if (cmdInfo.example) string += `§eExample§f: §a${Server.command.prefix}§f${cmdInfo.example.join(`\n${Server.command.prefix}§f`)}`;
+
         return sender.tellraw(string);
+
     } catch (error) {
-        console.warn(JSON.stringify(e.stack), e);
+        console.warn(`Error while sending the help command: ${error}\n${error.stack}`);
     }
 });

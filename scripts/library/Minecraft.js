@@ -67,7 +67,9 @@ class ServerBuild extends ServerBuilder {
                     if (element?.cancelMessage)
                         data.cancel = true;
                     try {
-                        element.callback(data, args);
+                        system.run(() => {
+                            element.callback(data, args);
+                        })
                     } catch (error) {
                         this.runCommandAsync(`tellraw @a {"rawtext":[{"text":"§¶§c§lUAC JS Error ► §c${error}\n${error.stack}"}]}`);
                     };

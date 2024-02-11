@@ -37,7 +37,7 @@ const moduleDefs_prots = [
         toggle: ['§cOFF', '§aON']
     },
     {
-        mname: 'Anti creative',
+        mname: 'Anti-Creative',
         name: 'actoggle',
         toggle: ['§cOFF', '§aON']
     },
@@ -90,6 +90,11 @@ const moduleDefs_util = [
         toggle: ['§cOFF', '§aON']
     },
     {
+        mname: 'Unban Window',
+        name: 'ubwtoggle',
+        toggle: ['§cOFF', '§aON']
+    },
+    {
         mname: 'Death Toggle',
         name: 'dethtoggle',
         toggle: ['§cOFF', '§aON']
@@ -108,6 +113,11 @@ const moduleDefs_util = [
         mname: 'Player Commands',
         name: 'icmtoggle',
         toggle: ['§cOFF', '§aON']
+    },
+    {
+        mname: 'Mining Detection',
+        name: 'mdmtoggle',
+        toggle: ['§cOFF', '§aON'],
     },
     {
         mname: 'One Player Sleep',

@@ -49,7 +49,7 @@ function worldBorder(player) {
 
         //Anti-Crasher contributed by SmoothieMC
     }
-}
+};
 
 /*
 ░░████░░░████░░████████░░████████░░░░░░░
@@ -62,8 +62,6 @@ function worldBorder(player) {
 let SpawnX = scoreTest('worlddum', 'Worldx');
 let SpawnZ = scoreTest('worlddum', 'Worldz');
 let SpawnY = scoreTest('worlddum', 'Worldy');
-let BorderX = scoreTest('BDXdummy', 'Border_Coord_X');
-let BorderZ = scoreTest('BDXdummy', 'Border_Coord_Z');
 let on_tick = 0;
 
 system.runInterval(() => {
@@ -80,32 +78,21 @@ system.runInterval(() => {
             if (opsbool) { ops(); }
         }
 
-        if (on_tick == 15) {
-            const entitycount = scoreTest('entitydummy', 'entitycount');
-            if (entitycount >= 340) {
-                overworld.runCommandAsync(`function UAC/packages/autoclear-manual`);
-                tellrawServer(`§¶§cUAC §¶§b► §cEmergency Lag Clear §bwas performed due to entity count going over §6340§b.`);
-                TellRB(`flag_0`, `UAC SYSTEM ► Emergency Lag Clear triggered due to entity count going over 340`);
-                setScore('entitydummy', 'entitycount', 0, false);
-            }
-        }
-
         // one second module functions -- 2nd schedual  -- ran from backend not players
         if (on_tick >= 20) {
             let players = world.getPlayers();
             for (let player of players) {
                 const name = player.getName();
                 worldBorder(player);
-                if (scoreTest('mrunban', 'unban') == 0) {
+                const unbantoggle = new Database();
+                if (unbantoggle.get('ubwtoggle') === 0) {
                     playerbans(player);
                 }
                 hotbar_message(player);
                 movement_check(player);
                 afk_kick(player);
                 if (opabuse_bool) { op_abuse(player) }
-                setScore(player, "has_gt", 1, false);
-
-                //Namespoof patch provided by the Paradox Team
+                //Namespoof patch provided by the Paradox Team.
                 let char_length = player.nameTag;
                 for (let i = 0; i < char_length.length; i++) {
                     if (char_length.charCodeAt(i) > 255) {
@@ -215,105 +202,47 @@ world.beforeEvents.itemUseOn.subscribe((eventData) => {
 
 world.afterEvents.playerSpawn.subscribe((data) => {
     let player = data.player;
-    let name = player.nameTag;
     let { x, y, z } = player.location;
 
     if (!player.hasTag('seen_gui')) {
         waitMove.set(player, [x, y, z]);
     }
-    if (scoreTest('mrunban', 'unban') == 0) {
+    const unbantoggle = new Database();
+    if (unbantoggle.get('ubwtoggle') === 0) {
         playerbans(player);
     }
-    if (scoreTest(player, 'online') == 1) return;
-    overworld.runCommandAsync(`execute as "${name}" run function UAC/packages/playerjoined`);
 });
 
 world.afterEvents.playerLeave.subscribe((data) => {
-    overworld.runCommandAsync(`scoreboard players set * online 0`);
-    overworld.runCommandAsync(`scoreboard players set @a online 1`);
+
 });
 
-//  chat filter example code
+//  chat filter example code.
 world.beforeEvents.chatSend.subscribe((data) => {
     try {
-        let crbool = scoreTest('crdummy', 'chatrank');
-        let acsbool = scoreTest('acsdummy', 'acstoggle');
-        let time = (scoreTest(data.sender, 'chatspam') / 20);
-        let mutetime = (time / 60)
+        const currentTime = Date.now();
+        const lastMessageTime = new Database(data.sender).get('lastMessageTime') || 0;
+        const acstoggle = new Database().get('acstoggle');
+        const timeDifference = currentTime - lastMessageTime;
+        const cooldownPeriod = 5000;
+        if (acstoggle === 0) return;
+        if (data.sender.hasTag('staffstatus')) return;
+        if (timeDifference < cooldownPeriod) {
+            data.cancel = true;
+            return data.sender.tellraw(`§¶§cUAC ► §6Anti-ChatSpam §bPlease wait 5 seconds before sending another message.`);
+        }
 
         if (data.sender.hasTag('muted')) {
             (data.cancel = true);
-            if (scoreTest(data.sender, 'chatspam') <= 1200) {
-                data.sender.tellraw(`§¶§c§lUAC ► §bYou are currently muted for §c${time} §bseconds left`)
-            } else {
-                return data.sender.tellraw(`§¶§c§lUAC ► §bYou are currently muted for §c${mutetime} §bminutes left`)
-            }
-            return
+            data.sender.tellraw(`§¶§c§lUAC ► §bYou are currently muted.`);
+            return;
         };
 
-        if (acsbool) { setScore(data.sender, "chatspam", 100, true); }
-        if (acsbool && scoreTest(data.sender, 'chatspam') >= 500 && !data.sender.hasTag('staffstatus')) {
-
-            (data.cancel = true);
-            return data.sender.tellraw(`§¶§cUAC ► §6Anti-ChatSpam §bYour messages are being rate limted. Please Wait §c§l${time} §r§bseconds`);
-        }
-
-        let temprank = (`${data.sender.getTags().find((tag) => tag.startsWith("temprank:"))}`);
-        if (data.sender.hasTag(temprank)) {
-            let givenrank = (`${data.sender.getTags().find((tag) => tag.startsWith("temprank:")).replace('temprank:', '')}`);
-            let newrank = (`rank:${givenrank}`);
-            let currentrank = (`${data.sender.getTags().find((tag) => tag.startsWith("rank:"))}`);
-            if (temprank == currentrank) {
-                data.sender.runCommandAsync(`tag @s remove ${temprank}`);
-            }
-            data.sender.runCommandAsync(`tag @s remove ${currentrank}`);
-            data.sender.runCommandAsync(`tag @s add ${newrank}`);
-            data.sender.runCommandAsync(`tag @s remove ${temprank}`);
-        }
-
-        let tempcolor = (`${data.sender.getTags().find((tag) => tag.startsWith("tempcolor:"))}`);
-        if (data.sender.hasTag(tempcolor)) {
-            let givencolor = (`${data.sender.getTags().find((tag) => tag.startsWith("tempcolor:")).replace('tempcolor:', '')}`);
-            let newcolor = (`color:${givencolor}`);
-            let currentcolor = (`${data.sender.getTags().find((tag) => tag.startsWith("color:"))}`);
-            if (tempcolor == currentcolor) {
-                data.sender.runCommandAsync(`tag @s remove "${tempcolor}"`);
-            }
-            data.sender.runCommandAsync(`tag @s remove "${currentcolor}"`);
-            data.sender.runCommandAsync(`tag @s add "${newcolor}"`);
-            data.sender.runCommandAsync(`tag @s remove "${tempcolor}"`);
-        }
-        if (data.sender.hasTag('rankremove')) {
-            let currentrank = (`${data.sender.getTags().find((tag) => tag.startsWith("rank:"))}`);
-            data.sender.runCommandAsync(`tag @s remove ${currentrank}`);
-            data.sender.runCommandAsync(`tag @s add "rank:Member"`);
-            data.sender.runCommandAsync(`tag @s remove rankremove`);
-        }
-        if (crbool) {
-            if (data.message.startsWith('UAC.')) { return }
-            let color = (
-                `${data.sender
-                    .getTags()
-                    .find((tag) => tag.startsWith("color:"))
-                    ?.replace(/"/g, '')
-                    ?.replace('color:', '') ?? "b"}`
-            )
-            return (
-                (data.cancel = true),
-                tellrawServer(`§l§8[§r§${color}${data.sender
-                    .getTags()
-                    .find((tag) => tag.startsWith("rank:"))
-                    ?.substring(5)
-                    ?.replaceAll("--", "§r§l§8][§r") ?? "Member"
-                    }§l§8]§r §7${data.sender.nameTag}:§r ${data.message}`)
-            );
-        }
+        new Database(data.sender).set('lastMessageTime', currentTime);
     } catch (error) {
-        return (data.cancel = false), console.warn(`${error}, ${error.stack}`);
+        return console.warn(`${error}, ${error.stack}`);
     }
 });
-
-
 
 /** 
  * The log of the players break times
@@ -349,14 +278,15 @@ world.beforeEvents.playerBreakBlock.subscribe(({ block, dimension, player }) => 
     let blockname = block.type.id;
     log[player.name] = Date.now();
     const togglesForLoggingBlockbreaks = new Database();
+    const mdmtoggle = togglesForLoggingBlockbreaks.get('mdmtoggle');
     const diamond_notiv = togglesForLoggingBlockbreaks.get('diamondmd');
     const emerald_notiv = togglesForLoggingBlockbreaks.get('emeraldmd');
     const gold_notiv = togglesForLoggingBlockbreaks.get('goldmd');
     const iron_notiv = togglesForLoggingBlockbreaks.get('ironmd');
     const lapiz_notiv = togglesForLoggingBlockbreaks.get('lapizmd');
     const nether_notiv = togglesForLoggingBlockbreaks.get('scrapmd');
-
-    // Mining Detection - Gametest Implementation
+    if (mdmtoggle === 0) return;
+    // Mining Detection.
     if (ores.includes(blockname)) {
         system.run(() => {
             if (blockname.replace('deepslate_', '') == 'minecraft:diamond_ore') {

@@ -1946,9 +1946,6 @@
 				]
 			},
 			"minecraft:scaffolding_climber": {},
-			"minecraft:on_death": {
-				"event": "uac:true_death"
-			},
 			"minecraft:damage_sensor": {
 				"triggers": [
 					{
@@ -2270,16 +2267,6 @@
 					"target": "other",
 					"command": [
 						"tag @s add killer"
-					]
-				}
-			},
-			"uac:true_death": {
-				"run_command": {
-					"command": [
-						"scoreboard players add @p[tag=killer] kills 1",
-						"scoreboard players add @p[tag=killer] killstreak 1",
-						"execute as @s[tag=killer,scores={killstreak=10..}] run function UAC/asset/killstreak-msg",
-						"tag @p remove killer"
 					]
 				}
 			},

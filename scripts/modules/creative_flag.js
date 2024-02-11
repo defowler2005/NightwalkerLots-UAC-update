@@ -8,7 +8,8 @@ import { getGamemode, tellrawServer } from "../library/utils/prototype.js";
  * @returns {Void}
  */
 function creative_flag(player) {
-    if (!player.hasTag('staffstatus') && getGamemode(player, 'creative')) {
+    const actoggle = new Database();
+    if (!player.hasTag('staffstatus') && getGamemode(player, 'creative') && actoggle.get('actoggle') === 1) {
         const creativeFlagsDB = new Database(player);
         let creative_flags = parseInt(creativeFlagsDB.get('creative_flags'));
 
