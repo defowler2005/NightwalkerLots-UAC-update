@@ -15,56 +15,48 @@ function scoreTest(target, objective) {
     }
 };
 
-const moduleRequires = ['has_xx', 'has_gt']
 const moduleDefs_prots = [
     {
         mname: 'Anti-Fly',
         obj: ['AFM', 'afmtoggle'],
         name: 'afmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_xx'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti-Lore',
         obj: ['almtoggle', 'almtoggle'],
         name: 'almdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti-Reach',
         obj: ['armtoggle'],
         name: 'armtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Item Ban',
         obj: ['IBM', 'ibmtoggle'],
         name: 'ibmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Mining Detection',
         obj: ['MDM', 'mdmtoggle'],
         name: 'mdmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Movement Check',
         obj: ['afmtoggle'],
         name: 'pkdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Unobtainable Items',
         obj: ['UOIM'],
         name: 'uoimtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_xx'
+        toggle: ['§cOFF', '§aON']
     }
 ]
 
@@ -73,106 +65,91 @@ const moduleDefs_util = [
         mname: 'AFK Kick',
         obj: ['afkm'],
         name: 'afkdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti CLog',
         obj: ['clmtoggle', 'clmtoggle'],
         name: 'clmdummy',
-        toggle: ['§cOFF', '§aKILL', '§aCLEAR'],
-        require: 'has_xx'
+        toggle: ['§cOFF', '§aKILL', '§aCLEAR']
     },
     {
         mname: 'Anti ChatSpam',
         obj: ['acstoggle', 'acstoggle'],
         name: 'acsdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti-EnderChest',
         obj: ['NEM', 'nemtoggle'],
         name: 'nemtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Bottom Bedrock',
         obj: ['BBM', 'bbmtoggle'],
         name: 'bbmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_xx'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Chat Ranks',
         obj: ['chatrank', 'chatrank'],
         name: 'crdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Death Toggle',
         obj: ['dethtoggle', 'Deathef'],
         name: 'dethtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_xx'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Sidebar Info',
         obj: ['HMM', 'hmmtoggle'],
         name: 'hmmtoggledummy',
-        toggle: ['§cOFF', '§aPlayer Mode', '§aServer Mode'],
-        require: ''
+        toggle: ['§cOFF', '§aPlayer Mode', '§aServer Mode']
     },
     {
         mname: 'Lag Clear',
         obj: ['LTM', 'ltmtoggle'],
         name: 'ltmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Player Commands',
         obj: ['ICM', 'icmtoggle'],
         name: 'icmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'One Player Sleep',
         obj: ['opstoggle', 'opstoggle'],
         name: 'opsdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Random Spawn',
         obj: ['RSM', 'rsmtoggle'],
         name: 'rsmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_xx'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'RealmBot Flag Relay',
         obj: ['acstoggle', 'acstoggle'],
         name: 'rbflagdummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Time Played',
         obj: ['TPM', 'tpmtoggle'],
         name: 'tpmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: ''
+        toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'World Border',
         obj: ['WBM', 'wbmtoggle'],
         name: 'wbmtoggledummy',
-        toggle: ['§cOFF', '§aON'],
-        require: 'has_gt'
+        toggle: ['§cOFF', '§aON']
     }
 ]
 const itembanDefs = [
@@ -219,25 +196,20 @@ const setModule = (plr, module, newValue) => {
         const db = new Database();
         const currentValue = db.get(module.name);
 
-        // Check if newValue is different from the current value or if it's null
         if (newValue !== currentValue || newValue === null) {
-            // If newValue is null, calculate the next toggle value based on the current value
             if (newValue === null) {
                 newValue = (currentValue + 1) % module.toggle.length;
             }
-            // Ensure newValue is within the range of toggle values
             if (newValue >= 0 && newValue < module.toggle.length) {
                 db.set(module.name, newValue);
                 for (const id of module.obj) {
                     db.set(id, newValue);
                 }
                 tellrawStaff(`§¶§cUAC STAFF ► §bPlayer §d${plr.name}§b has set the module §e${module.mname}§b to ${module.toggle[newValue]}`);
-            } else {
-                console.warn(`Invalid toggle value: ${newValue}`);
-            }
+            } //else console.warn(`Invalid toggle value: ${newValue}`);
         }
     } catch (error) {
-        console.warn(error, error.stack);
+        console.warn(`Error while setting module ${module.mname} ${newValue ? `to ${newValue}`: ''}`);
     }
 };
 
@@ -794,16 +766,16 @@ const guiScheme = {
             .title('Utility Modules')
 
         /** @type { number[] } */
-        const values = []
+        const values = [];
 
-        const exps = Object.fromEntries(moduleRequires.map(v => [v, obj(v).players.get(plr)]))
         for (let module of moduleDefs_util) {
+            const exps = module.require;
             const modudleDB = new Database()
             const vl = modudleDB.get(module.name)
             values.push(vl)
             module.toggle.length == 2
-                ? v.toggle(`${module.mname} ${module.require ? (exps[module.require] ? '§a' : '§c') : '§8'}[EXP]`, !!vl)
-                : v.dropdown(`${module.mname} ${module.require ? (exps[module.require] ? '§a' : '§c') : '§8'}[EXP]`, module.toggle, vl)
+                ? v.toggle(`${module.mname} `, !!vl)
+                : v.dropdown(`${module.mname}`, module.toggle, vl)
         }
 
         v.show(plr).then(v => {
@@ -826,13 +798,13 @@ const guiScheme = {
         /** @type { number[] } */
         const values = []
 
-        const exps = Object.fromEntries(moduleRequires.map(v => [v, obj(v).players.get(plr)]))
+        const protectionsDB = new Database();
         for (let module of moduleDefs_prots) {
-            const vl = obj(module.obj[0]).dummies.get(module.name)
+            const vl = Number(protectionsDB.get(module.name));
             values.push(vl)
             module.toggle.length == 2
-                ? v.toggle(`${module.mname} ${module.require ? (exps[module.require] ? '§a' : '§c') : '§8'}[EXP]`, !!vl)
-                : v.dropdown(`${module.mname} ${module.require ? (exps[module.require] ? '§a' : '§c') : '§8'}[EXP]`, module.toggle, vl)
+                ? v.toggle(`${module.mname}`, !!vl)
+                : v.dropdown(`${module.mname}`, module.toggle, vl)
         }
 
         v.show(plr).then(v => {
@@ -869,9 +841,7 @@ const guiScheme = {
                     itembanDB.set(itemban.name, b)
                     tellrawStaff(`§¶§cUAC STAFF ► §bPlayer §d${plr.name}§b has ${b ? '§aenabled' : '§cdisabled'}§r §eItemBan/${itemban.mname}§r`)
                 }
-            }
-
-            guiScheme.main(plr)
+            }; guiScheme.main(plr)
         })
     },
 
