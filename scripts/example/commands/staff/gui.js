@@ -18,140 +18,119 @@ function scoreTest(target, objective) {
 const moduleDefs_prots = [
     {
         mname: 'Anti-Fly',
-        obj: ['AFM', 'afmtoggle'],
-        name: 'afmtoggledummy',
+        name: 'afmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti-Lore',
-        obj: ['almtoggle', 'almtoggle'],
         name: 'almdummy',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti-Reach',
-        obj: ['armtoggle'],
-        name: 'armtoggledummy',
+        name: 'armtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Item Ban',
-        obj: ['IBM', 'ibmtoggle'],
-        name: 'ibmtoggledummy',
+        name: 'ibmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Mining Detection',
-        obj: ['MDM', 'mdmtoggle'],
-        name: 'mdmtoggledummy',
+        name: 'mdmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Movement Check',
-        obj: ['afmtoggle'],
         name: 'pkdummy',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Unobtainable Items',
-        obj: ['UOIM'],
-        name: 'uoimtoggledummy',
+        name: 'uoimtoggle',
         toggle: ['§cOFF', '§aON']
     }
-]
+];
 
 const moduleDefs_util = [
     {
         mname: 'AFK Kick',
-        obj: ['afkm'],
         name: 'afkdummy',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti CLog',
-        obj: ['clmtoggle', 'clmtoggle'],
         name: 'clmdummy',
         toggle: ['§cOFF', '§aKILL', '§aCLEAR']
     },
     {
         mname: 'Anti ChatSpam',
-        obj: ['acstoggle', 'acstoggle'],
         name: 'acsdummy',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Anti-EnderChest',
-        obj: ['NEM', 'nemtoggle'],
-        name: 'nemtoggledummy',
+        name: 'nemtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Bottom Bedrock',
-        obj: ['BBM', 'bbmtoggle'],
-        name: 'bbmtoggledummy',
+        name: 'bbmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Chat Ranks',
-        obj: ['chatrank', 'chatrank'],
-        name: 'crdummy',
+        name: 'crdtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Death Toggle',
-        obj: ['dethtoggle', 'Deathef'],
-        name: 'dethtoggledummy',
+        name: 'dethtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
-        mname: 'Sidebar Info',
-        obj: ['HMM', 'hmmtoggle'],
-        name: 'hmmtoggledummy',
-        toggle: ['§cOFF', '§aPlayer Mode', '§aServer Mode']
+        mname: 'Hotbar Message',
+        name: 'hmmtoggle',
+        toggle: ['§cOFF', '§aPlayer operatable', 'Server Mode', '§aResourcePack Mode'],
     },
     {
         mname: 'Lag Clear',
-        obj: ['LTM', 'ltmtoggle'],
-        name: 'ltmtoggledummy',
+        name: 'ltmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Player Commands',
-        obj: ['ICM', 'icmtoggle'],
-        name: 'icmtoggledummy',
+        name: 'icmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'One Player Sleep',
-        obj: ['opstoggle', 'opstoggle'],
-        name: 'opsdummy',
+        name: 'opstoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Random Spawn',
-        obj: ['RSM', 'rsmtoggle'],
-        name: 'rsmtoggledummy',
+        name: 'rsmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'RealmBot Flag Relay',
-        obj: ['acstoggle', 'acstoggle'],
-        name: 'rbflagdummy',
+        name: 'rbflagtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'Time Played',
-        obj: ['TPM', 'tpmtoggle'],
-        name: 'tpmtoggledummy',
+        name: 'tpmtoggle',
         toggle: ['§cOFF', '§aON']
     },
     {
         mname: 'World Border',
-        obj: ['WBM', 'wbmtoggle'],
-        name: 'wbmtoggledummy',
+        name: 'wbmtoggle',
         toggle: ['§cOFF', '§aON']
     }
-]
+];
+
 const itembanDefs = [
     { mname: 'Harming Arrow', obj: 'BNA', name: 'BNAdummy' },
     { mname: 'Book and Quill', obj: 'BNBQ', name: 'BNBQdummy' },
@@ -160,7 +139,8 @@ const itembanDefs = [
     { mname: 'Shulkerboxes', obj: 'BNSB', name: 'BNSBdummy' },
     { mname: 'TNT', obj: 'BNTN', name: 'BNMTNummy' },
     { mname: 'Trident', obj: 'BNTD', name: 'BNMTDummy' }
-]
+];
+
 const oreBanDefs = [
     { mname: 'Diamond', obj: 'diamondmd' },
     { mname: 'Emerald', obj: 'emeraldmd' },
@@ -191,7 +171,7 @@ const particleDefs = [
 
 /** @type { (plr: Player, module: typeof moduleDefs_prots[number], newValue?: number) => void } */
 
-const setModule = (plr, module, newValue) => {
+function setModule(plr, module, newValue) {
     try {
         const db = new Database();
         const currentValue = db.get(module.name);
@@ -202,18 +182,15 @@ const setModule = (plr, module, newValue) => {
             }
             if (newValue >= 0 && newValue < module.toggle.length) {
                 db.set(module.name, newValue);
-                for (const id of module.obj) {
+                for (const id of module.name) {
                     db.set(id, newValue);
-                }
-                tellrawStaff(`§¶§cUAC STAFF ► §bPlayer §d${plr.name}§b has set the module §e${module.mname}§b to ${module.toggle[newValue]}`);
+                }; tellrawStaff(`§¶§cUAC STAFF ► §bPlayer §d${plr.name}§b has set the module §e${module.mname}§b to ${module.toggle[newValue]}`);
             } //else console.warn(`Invalid toggle value: ${newValue}`);
         }
     } catch (error) {
-        console.warn(`Error while setting module ${module.mname} ${newValue ? `to ${newValue}`: ''}`);
+        console.warn(`Error while setting module ${module.mname} ${newValue ? `to ${newValue}` : ''}`);
     }
-};
-
-
+}
 
 const guiScheme = {
     /** @type { (plr: Player) => Void } */
@@ -294,7 +271,7 @@ const guiScheme = {
         display: (plr) => {
             const serverDatabase = new Database();
             const playerDatabase = new Database(plr);
-            if (serverDatabase.get('hmmtoggle') === 2) return plr.sendMessage(`§¶§cUAC ► §c§lRealm owner has set a sidebar message global.`);
+            if (serverDatabase.get('hmmtoggle') === 0) return plr.sendMessage(`§¶§cUAC ► §c§lRealm owner has set a sidebar message global.`);
             const actionList = [
                 ['Personal Stats', () => playerDatabase.set('hmmtoggle', 1)],
                 ['Server Stats', () => playerDatabase.set('hmmtoggle', 2)],
@@ -408,9 +385,8 @@ const guiScheme = {
 
             v.show(plr).then(v => {
                 if (v.canceled) return
-                cmdlist[v.selection][1]()
+                cmdlist[v.selection][1]();
             })
-
         },
         tpa_send: (plr, target) => {
             let name = plr.nameTag;
@@ -769,22 +745,19 @@ const guiScheme = {
         const values = [];
 
         for (let module of moduleDefs_util) {
-            const exps = module.require;
-            const modudleDB = new Database()
-            const vl = modudleDB.get(module.name)
+            const modudleDB = new Database();
+            const vl = modudleDB.get(module.name);
             values.push(vl)
             module.toggle.length == 2
                 ? v.toggle(`${module.mname} `, !!vl)
                 : v.dropdown(`${module.mname}`, module.toggle, vl)
         }
-
         v.show(plr).then(v => {
             if (v.canceled) return guiScheme.main(plr)
             const newValues = v.formValues.map(v => Number(v))
             for (let i = 0, m = newValues.length, a, b; (a = values[i], b = newValues[i], i < m); i++) {
                 if (a != b) {
                     setModule(plr, moduleDefs_util[i], b)
-                    //console.warn(`${b}`)
                 }
             }
             guiScheme.main(plr)
@@ -806,7 +779,7 @@ const guiScheme = {
                 ? v.toggle(`${module.mname}`, !!vl)
                 : v.dropdown(`${module.mname}`, module.toggle, vl)
         }
-
+        mdmtoggle
         v.show(plr).then(v => {
             if (v.canceled) return guiScheme.main(plr)
             const newValues = v.formValues.map(v => Number(v))

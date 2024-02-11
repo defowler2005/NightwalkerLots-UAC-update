@@ -32,6 +32,7 @@ Server.command.register(registerInformation, (chatmsg, args) => {
                     creativeFlagsDB.get('creative_flags')
                     TellRB(`flag_0`, `UAC ► ${name} has reset the warns of ${playerfound.getName()}`);
                     creativeFlagsDB.set('creative_flags', 0)
+                    playerfound.removeTag('creativeBan')
                     tellrawServer(`§¶§cUAC §b► §d${playerfound.name}'s §¶§cwarns were reset by a operator.`);
                 }
             } else {

@@ -29,7 +29,6 @@ function creative_flag(player) {
                 player.addTag('creativeBan')
                 tellrawServer(`§¶§cUAC ► §d ${player.name}§b's §¶§cgameplay has been restricted due to changing gamemodes`);
                 break;
-
             default:
                 break;
         }
@@ -37,7 +36,6 @@ function creative_flag(player) {
         player.runCommand('gamemode s');
         player.kill();
         if (creative_flags >= 4) return;
-
         creative_flags++;
         creativeFlagsDB.set('creative_flags', creative_flags);
     }
