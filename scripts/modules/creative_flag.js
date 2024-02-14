@@ -1,7 +1,7 @@
 import { Player } from "@minecraft/server";
 import { Database } from "../library/Minecraft";
 import { getGamemode, tellrawServer } from "../library/utils/prototype.js";
-
+ 
 /**
  * 
  * @param {Player} player 
