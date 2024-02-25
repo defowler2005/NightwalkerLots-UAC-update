@@ -8,6 +8,10 @@
             "is_experimental": false
         },
         "components": {
+            "minecraft:nameable": {
+                "always_show": true,
+                "allow_name_tag_renaming": false
+            },
             "minecraft:breathable": {
                 "breathes_water": true
             },

@@ -23,6 +23,7 @@ import './staff/gui.js';
 //import './staff/echestwipe.js';
 import './staff/warnreset.js';
 import './staff/warn.js';
+import './staff/leaderboard.js';
 //import './staff/ranks.js';
 //import './staff/chatspam.js';
 //import './staff/mute.js';
