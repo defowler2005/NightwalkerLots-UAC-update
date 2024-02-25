@@ -136,7 +136,7 @@ export function hotbar(player, message) {
  * @example if (getGamemode(player, 'creative')) return;
  */
 export function getGamemode(player, gm) {
-   return world.getPlayers({ name: player.name, gameMode: gm }).length
+   return world.getPlayers({ name: player.name, gameMode: gm }).length;
 }
 
 export function hasitem(player, itemId, clearItems = false) {

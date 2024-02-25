@@ -16,9 +16,8 @@ import '../modules/world_border.js';
 import { afk_kick } from '../modules/afk_kick.js';
 import { Check_Packet_Behavior } from '../modules/bad_packet.js';
 //game resource dependancies
-import { world as World, system } from "@minecraft/server";
 import { tellrawStaff, tp, tellrawServer, TellRB, getGamemode } from '../library/utils/prototype.js';
-import { world, Player } from '@minecraft/server';
+import { world, Player, system, BlockPermutation, BlockTypes } from '@minecraft/server';
 import { Database } from '../library/Minecraft.js';
 import '../library/miscellaneous/chatrank.js';
 import { creative_flag } from '../modules/creative_flag.js';
@@ -82,12 +81,12 @@ system.runInterval(() => {
                 const name = player.getName();
                 worldBorder(player);
                 const unbantoggle = new Database();
-                //if (unbantoggle.get('ubwtoggle') === 0) {
+                if (unbantoggle.get('ubwtoggle') === 0) {
                     playerbans(player);
-                //}
+                };
                 hotbar_message(player);
                 movement_check(player);
-                creative_flag(player)
+                creative_flag(player);
                 afk_kick(player);
                 if (opabuse_bool) { op_abuse(player) }
                 //Namespoof patch provided by the Paradox Team.
@@ -106,15 +105,19 @@ system.runInterval(() => {
         for (let player of world.getPlayers()) {
             Check_Packet_Behavior(player);
             creative_flag(player)
-            if (player.hasTag('fzplr')) {
-                if (player.hasTag('staffstatus')) { return player.removeTag('fzplr'); }
-                player.teleport({ x: player.location.x, y: player.location.y, z: player.location.z }, { dimension: player.dimension });
-            }
         }
     } catch (error) {
         console.warn(`Error while running the main section: ${error}\n$${error.stack}`);
     }
+});
 
+system.runInterval(() => {
+    for (const player of world.getAllPlayers()) {
+        if (player.hasTag('fzplr')) {
+            if (player.hasTag('staffstatus')) { return player.removeTag('fzplr'); }
+            player.teleport({ x: player.location.x, y: player.location.y, z: player.location.z }, { dimension: player.dimension });
+        }
+    }
 });
 
 const unobtainables = {
@@ -161,25 +164,26 @@ const unobtainables = {
     'minecraft:glowingobsidian': 0,
 };
 
-
-World.beforeEvents.playerPlaceBlock.subscribe(({ block, player }) => {
-    // made originally by frost, and perfected by nightwalkerlots
-    const uoimbool = scoreTest('uoimtoggledummy', 'uoimtoggle');
-    let { x, y, z } = player.location;
-    if (block.id in unobtainables && uoimbool) {
-        TellRB(`flag_1`, `UAC Unobtainable Items ► ${player.nameTag} tried to place ${block.id.replace('minecraft:', '')} at ${x} ${y} ${z}`);
-        tellrawStaff(`§l§¶§cUAC STAFF ► §6Unobtainable Items §bBlock Placement Flag \nBlock Type §7: §c${block.id.replace('minecraft:', '')} §bBlock Placer §7: §c${player.nameTag} §bLocation §7: §c${x} ${y} ${z}`);
-        let type = block.typeId.replace('minecraft:', '');
-        if (player.hasTag(`staffstatus`)) { return };
-        block.setType('minecraft:air');
-        player.runCommandAsync(`function UAC/asset/illegalitemwarn`);
-        tellrawServer(`§¶§c§lUAC ► §6Unobtainable Items §d${player.nameTag} §bwas temp-kicked for having §c${type}`);
-        player.runCommandAsync(`clear @s`);
-        try { player.runCommandAsync(`kick "${player.nameTag}" §r\n§l§c\n§r\n§eKicked By:§r §l§3§•Unity Anti•Cheat§r\n§bReason:§r §c§lUnobtainable Items | ${type}`); }
-        catch { player.runCommandAsync(`event entity @s uac:ban_main`); }
-    }
+world.beforeEvents.playerPlaceBlock.subscribe(({ block, player }) => {
+    // made originally by frost, and perfected by nightwakerlots
+    const uoimbool = parseInt(new Database().get('uoimtoggle'));
+    system.run(() => {//illegalitemwarn.
+        const x = Math.floor(player.location.x);
+        const y = player.location.y;
+        const z = Math.floor(player.location.z);
+            if (block.type.id in unobtainables && uoimbool === 1 && player.hasTag(`staffstatus`) === false) {
+            TellRB(`flag_1`, `UAC Unobtainable Items ► ${player.nameTag} tried to place ${block.type.id.replace('minecraft:', '')} at ${x} ${y} ${z}`);
+            tellrawStaff(`§l§¶§cUAC STAFF ► §6Unobtainable Items §bBlock Placement Flag \nBlock Type §7: §c${block.type.id.replace('minecraft:', '')} §bBlock Placer §7: §c${player.nameTag} §bLocation §7: §c${x} ${y} ${z}`);
+            let type = block.type.id.replace('minecraft:', '');
+            block.setPermutation(BlockPermutation.resolve('minecraft:air'));
+            player.sendMessage('Illegal item!');
+            tellrawServer(`§¶§c§lUAC ► §6Unobtainable Items §d${player.nameTag} §bwas temp-kicked for having §c${type}`);
+            player.runCommandAsync(`clear @s`);
+            try { player.runCommandAsync(`kick "${player.nameTag}" §r\n§l§c\n§r\n§eKicked By:§r §l§3§•Unity Anti•Cheat§r\n§bReason:§r §c§lUnobtainable Items | ${type}`); }
+            catch { player.runCommandAsync(`event entity @s uac:ban_main`); }
+        }
+    })
 });
-
 
 world.beforeEvents.itemUseOn.subscribe((eventData) => {
     let item = eventData.itemStack.typeId;

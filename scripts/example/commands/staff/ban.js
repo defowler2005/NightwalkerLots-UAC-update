@@ -16,28 +16,28 @@ const registerInformation = {
 Server.command.register(registerInformation, (chatmsg, args) => {
     try {
 
-        
+
         const { sender } = chatmsg;
         const name = sender.getName();
-        
+
         let reason = []
-        
-        
+
+
         if (sender.hasTag('staffstatus')) {
-            if(!args[0]) {return sender.tellraw(`§¶§c§lUAC ► §cPlayer Name not specified`)}
+            if (!args[0]) { return sender.tellraw(`§¶§c§lUAC ► §cPlayer Name not specified`) }
             let input = args[0].replace('@', '').replace(/"/g, '')
             let playerfound = [...world.getPlayers()].find(player => player.getName() === input);
-            if(!playerfound) {return sender.tellraw(`§¶§cUAC ► §c§lError 7: No player by that name. §cUsage : §6UAC.ban @player [reason]\n§bIf they have spaces in their name, instead use\n§6/scoreboard players [ playername ] set Ban 1`);}
-            
-            
-            if(args[1]) {
+            if (!playerfound) { return sender.tellraw(`§¶§cUAC ► §c§lError 7: No player by that name. §cUsage : §6UAC.ban @player [reason]\n§bIf they have spaces in their name, instead use\n§6/scoreboard players [ playername ] set Ban 1`); }
+
+
+            if (args[1]) {
                 reason.push(`${args.join(' ').replace(`${args[0]} `, '').replace('@', '')}`)
             } else {
                 reason.push(`None Given`);
             }
-            if(playerfound) {
+            if (playerfound) {
                 let playername = playerfound.getName();
-                if (playername == name) {return sender.tellraw(`§¶§c§lUAC ► §c§lCan't ban yourself`); }
+                if (playername == name) { return sender.tellraw(`§¶§c§lUAC ► §c§lCan't ban yourself`); }
                 sender.runCommandAsync(`tag ${playername} remove reason_none`);
                 tellrawServer(`§¶§c§lUAC ► §d${name} §bbanned §d${playername} §bREASON : §c${reason}`);
                 TellRB(`ban`, `UAC ► ${name} has banned ${playername}. REASON : ${reason}`);
@@ -46,7 +46,7 @@ Server.command.register(registerInformation, (chatmsg, args) => {
                 sender.runCommandAsync(`tag ${playername} add Ban`);
             }
 
-            
+
         } else {
             return sender.tellraw(`§¶§c§lUAC ► §c§lThis command is meant for staff only`);
         }

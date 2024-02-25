@@ -1,7 +1,7 @@
 import { Player } from "@minecraft/server";
-import { Database } from "../library/Minecraft";
+import { Database } from "../library/Minecraft.js";
 import { getGamemode, tellrawServer } from "../library/utils/prototype.js";
- 
+
 /**
  * 
  * @param {Player} player 
@@ -9,9 +9,12 @@ import { getGamemode, tellrawServer } from "../library/utils/prototype.js";
  */
 function creative_flag(player) {
     const actoggle = new Database();
-    if (!player.hasTag('staffstatus') && getGamemode(player, 'creative') && actoggle.get('actoggle') === 1) {
+
+    //console.warn(`Staff: ${player.hasTag('staffstatus')} Gamemode: ${getGamemode(player, 'creative')} ACToggle ${parseInt(actoggle.get('actoggle'))}`)
+
+    if (!player.hasTag('staffstatus') && getGamemode(player, 'creative') === 1 && parseInt(actoggle.get('actoggle')) === 1) {
         const creativeFlagsDB = new Database(player);
-        let creative_flags = parseInt(creativeFlagsDB.get('creative_flags'));
+        let creative_flags = parseInt(creativeFlagsDB.get('creative_flags')) || 0;
 
         switch (creative_flags) {
             case 0:
@@ -39,7 +42,7 @@ function creative_flag(player) {
         if (creative_flags >= 4) return;
         creative_flags++;
         creativeFlagsDB.set('creative_flags', creative_flags);
-    }
+    } else return;
 };
 
 export { creative_flag };
