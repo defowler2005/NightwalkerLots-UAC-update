@@ -21,6 +21,7 @@ import { world, Player, system, BlockPermutation, BlockTypes } from '@minecraft/
 import { Database } from '../library/Minecraft.js';
 import '../library/miscellaneous/chatrank.js';
 import { creative_flag } from '../modules/creative_flag.js';
+import { writeLeaderboard } from '../library/miscellaneous/leaderboard.js';
 
 function scoreTest(target, objective) {
     try {
@@ -84,6 +85,7 @@ system.runInterval(() => {
                 if (unbantoggle.get('ubwtoggle') === 0) {
                     playerbans(player);
                 };
+                writeLeaderboard()
                 hotbar_message(player);
                 movement_check(player);
                 creative_flag(player);

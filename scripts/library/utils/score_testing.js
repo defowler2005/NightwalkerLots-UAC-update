@@ -1,4 +1,4 @@
-import { world } from "@minecraft/server";
+import { Player, world } from "@minecraft/server";
 
 
 function scoreTest(target, objective) {
@@ -18,12 +18,19 @@ function scoreTest(target, objective) {
         return NaN
     }
 }*/
-
+/**
+ * 
+ * @param {Player} target 
+ * @param {String} objective 
+ * @param {Number} amount 
+ * @param {Number} add 
+ * @returns {Number}
+ */
 function setScore(target, objective, amount, add = false) {
     try {
         const scoreObj = world.scoreboard.getObjective(objective);
         const dummy = scoreObj.getParticipants().find(pT => pT.displayName == target);
-        const score = (add ? target.scoreboard.getScore(scoreObj) : 0) + amount;
+        const score = parseInt((add ? target.scoreboard.getScore(scoreObj) : 0) + amount);
         if (typeof target === 'string') return scoreObj.setScore(dummy, amount);
         target.scoreboard.setScore(scoreObj, score)
     } catch { return 0 };

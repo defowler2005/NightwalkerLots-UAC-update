@@ -3,7 +3,7 @@ import { Database, Server } from '../../../library/Minecraft.js';
 import { ActionFormData, ModalFormData } from '@minecraft/server-ui';
 import { setScore } from '../../../library/utils/score_testing.js';
 import { tellrawStaff, getGamemode } from '../../../library/utils/prototype.js';
-const obj = 'UNDEFINED.'
+const obj = 'UNDEFINED'
 
 function scoreTest(target, objective) {
     try {
@@ -444,13 +444,12 @@ const guiScheme = {
             plr.runCommandAsync(`execute @a[tag=tpatemp,scores={tpa=${scoreTest(plr, 'tpa')}}] ~~~ tag @s remove tpatemp`);
         },
 
-
         /** @type { (plr: Player, target: Player) => void } */
         stats: (plr, target) => {
             const v = new ActionFormData()
-                .title(`${target.name.replace(/§./g, '')}'s stats`)
+                .title(`${target.name.replace(/§./g, '')}'s stats`);
 
-            let text = []
+            let text = [];
 
             // location
             text.push('§l§eLocation')
@@ -954,8 +953,8 @@ const registerInformation = {
     ]
 };
 
-/** @type { Map<Player, [x:number,y:number,z:number]> } */
-const waitMove = new Map()
+/** @type { Map<Player, [x:Number,y:Number,z:Number]> } */
+const waitMove = new Map();
 
 Server.command.register(registerInformation, (chatmsg, args) => {
     const { sender } = chatmsg, { location: { x, y, z } } = sender;
@@ -963,7 +962,7 @@ Server.command.register(registerInformation, (chatmsg, args) => {
     if (icmtoggle.get('icmtoggle') === 0 && !sender.hasTag('staffstatus')) return sender.tellraw(`§¶§cUAC ► §c§lThe Realm Owner currently has Player Commands Disabled`);
     sender.tellraw(`§aMove to show the UI.`)
     waitMove.set(chatmsg.sender, [x, y, z])
-})
+});
 
 system.runInterval(() => {
     for (let [plr, [x, y, z]] of waitMove) {
@@ -990,4 +989,4 @@ system.runInterval(() => {
     }
 });
 
-export { waitMove }
+export { waitMove };
