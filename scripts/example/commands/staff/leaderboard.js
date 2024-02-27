@@ -22,8 +22,8 @@ Server.command.register(registerInformation, (chatmsg, args) => {
     const existingLeaderboard = world.getDimension('overworld').getEntities({ type: 'uac:leaderboard' }).find(entity => entity.location.x === defaultScoreboard.x && entity.location.y === defaultScoreboard.y && entity.location.z === defaultScoreboard.z);
 
     if (args.length !== 3 || isNaN(xCoord) || isNaN(yCoord) || isNaN(zCoord)) {
-        return sender.tellraw('§¶§c§lUAC ► §cUsage: /leaderboard [x] [y] [z]');
-    }
+        return sender.tellraw('§¶§c§lUAC ► §cUsage: leaderboard [x] [y] [z]');
+    };
 
     sender.tellraw('§¶§c§lUAC ► §dSuccessfully set the leaderboard elsewhere.');
     coordDB.set('leaderboard_coord_x', xCoord);
