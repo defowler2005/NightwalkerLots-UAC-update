@@ -2,17 +2,21 @@ import { world } from "@minecraft/server";
 import { Database } from '../Minecraft.js'
 
 const coordinatesDB = new Database();
-export const defaultScoreboard = {
-    x: coordinatesDB.get('leaderboard_coord_x'),
-    y: coordinatesDB.get('leaderboard_coord_y'),
-    z: coordinatesDB.get('leaderboard_coord_z')
-};
+
+export function getDefaultScoreboard() {
+    return {
+        x: coordinatesDB.get('leaderboard_coord_x'),
+        y: coordinatesDB.get('leaderboard_coord_y'),
+        z: coordinatesDB.get('leaderboard_coord_z')
+    };
+}
 
 /**
  * Set all player names and scores to the default leaderboard location.
  */
 export function writeLeaderboard() {
     try {
+        const defaultScoreboard = getDefaultScoreboard();
         const scoreboard = world.scoreboard.getObjective('money');
         const sortedPlayers = world.getAllPlayers().slice().sort((playerA, playerB) => {
             const scoreA = scoreboard.getScore(playerA);

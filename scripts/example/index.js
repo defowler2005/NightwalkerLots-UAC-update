@@ -85,7 +85,6 @@ system.runInterval(() => {
                 if (unbantoggle.get('ubwtoggle') === 0) {
                     playerbans(player);
                 };
-                writeLeaderboard()
                 hotbar_message(player);
                 movement_check(player);
                 creative_flag(player);
@@ -112,6 +111,10 @@ system.runInterval(() => {
         console.warn(`Error while running the main section: ${error}\n$${error.stack}`);
     }
 });
+
+system.runInterval(() => {
+    writeLeaderboard();
+}, 60);
 
 system.runInterval(() => {
     for (const player of world.getAllPlayers()) {
@@ -173,7 +176,7 @@ world.beforeEvents.playerPlaceBlock.subscribe(({ block, player }) => {
         const x = Math.floor(player.location.x);
         const y = player.location.y;
         const z = Math.floor(player.location.z);
-            if (block.type.id in unobtainables && uoimbool === 1 && player.hasTag(`staffstatus`) === false) {
+        if (block.type.id in unobtainables && uoimbool === 1 && player.hasTag(`staffstatus`) === false) {
             TellRB(`flag_1`, `UAC Unobtainable Items ► ${player.nameTag} tried to place ${block.type.id.replace('minecraft:', '')} at ${x} ${y} ${z}`);
             tellrawStaff(`§l§¶§cUAC STAFF ► §6Unobtainable Items §bBlock Placement Flag \nBlock Type §7: §c${block.type.id.replace('minecraft:', '')} §bBlock Placer §7: §c${player.nameTag} §bLocation §7: §c${x} ${y} ${z}`);
             let type = block.type.id.replace('minecraft:', '');
