@@ -90,6 +90,11 @@ const moduleDefs_util = [
         toggle: ['§cOFF', '§aON']
     },
     {
+        mname: 'Leaderboard',
+        name: 'lbdtoggle',
+        toggle: ['§cOFF', '§aON']
+    },
+    {
         mname: 'Unban Window',
         name: 'ubwtoggle',
         toggle: ['§cOFF', '§aON']

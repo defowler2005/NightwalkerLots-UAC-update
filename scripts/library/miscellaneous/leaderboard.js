@@ -1,5 +1,5 @@
 import { world } from "@minecraft/server";
-import { Database } from '../Minecraft.js'
+import { Database } from '../Minecraft.js';
 
 const coordinatesDB = new Database();
 
@@ -11,9 +11,6 @@ export function getDefaultScoreboard() {
     };
 }
 
-/**
- * Set all player names and scores to the default leaderboard location.
- */
 export function writeLeaderboard() {
     try {
         const defaultScoreboard = getDefaultScoreboard();
@@ -26,17 +23,23 @@ export function writeLeaderboard() {
 
         const leaderboardText = sortedPlayers.map((player, index) => {
             const score = scoreboard.getScore(player);
-            return `Rank ${index + 1} ${player.name} Score: ${score !== undefined ? score : 0}`;
+            return ` \n\nRank ${index + 1} ${player.name} Score: ${score !== undefined ? score : 0}\n `;
         }).join('\n');
-        const theLeaderboardEntities = world.getDimension('overworld').getEntities({ type: 'uac:leaderboard' });
-        const existingLeaderboard = theLeaderboardEntities.find(entity => entity.location.x === defaultScoreboard.x && entity.location.y === defaultScoreboard.y && entity.location.z === defaultScoreboard.z);
 
-        if (existingLeaderboard) existingLeaderboard.nameTag = leaderboardText;
-        else {
+        const theLeaderboardEntities = world.getDimension('overworld').getEntities({ type: 'uac:leaderboard' });
+        const existingLeaderboard = theLeaderboardEntities.find((entity) => entity.location.x === defaultScoreboard.x && entity.location.y === defaultScoreboard.y && entity.location.z === defaultScoreboard.z);
+
+        if (new Database().get('lbdtoggle') === 0) return existingLeaderboard.kill();
+        
+        if (existingLeaderboard) {
+            existingLeaderboard.nameTag = leaderboardText;
+        } else {
+            if (existingLeaderboard) return;
+
             const theLeaderboard = world.getDimension('overworld').spawnEntity('uac:leaderboard', { x: defaultScoreboard.x, y: defaultScoreboard.y, z: defaultScoreboard.z });
             theLeaderboard.nameTag = `${leaderboardText ? leaderboardText : '[Leaderboard]\n\nNo text.'}`;
         }
     } catch (error) {
-        console.warn(`Error while setting leaderboard: ${error}\n${error.stack}`)
+        //console.warn(`Error while setting leaderboard: ${error}\n${error.stack}`)
     }
 };

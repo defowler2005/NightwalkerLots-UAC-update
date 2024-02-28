@@ -16,12 +16,12 @@ import '../modules/world_border.js';
 import { afk_kick } from '../modules/afk_kick.js';
 import { Check_Packet_Behavior } from '../modules/bad_packet.js';
 //game resource dependancies
-import { tellrawStaff, tp, tellrawServer, TellRB, getGamemode } from '../library/utils/prototype.js';
-import { world, Player, system, BlockPermutation, BlockTypes } from '@minecraft/server';
-import { Database } from '../library/Minecraft.js';
+import { tellrawStaff, tellrawServer, TellRB } from '../library/utils/prototype.js';
+import { world, Player, system, BlockPermutation } from '@minecraft/server';
+import { Database, Server } from '../library/Minecraft.js';
 import '../library/miscellaneous/chatrank.js';
 import { creative_flag } from '../modules/creative_flag.js';
-import { writeLeaderboard } from '../library/miscellaneous/leaderboard.js';
+import { getDefaultScoreboard, writeLeaderboard } from '../library/miscellaneous/leaderboard.js';
 
 function scoreTest(target, objective) {
     try {
@@ -61,7 +61,7 @@ function worldBorder(player) {
 
 let on_tick = 0;
 
-system.runInterval(() => {
+Server.runInterval(() => {
     try {
         on_tick++;
 
@@ -107,16 +107,22 @@ system.runInterval(() => {
             Check_Packet_Behavior(player);
             creative_flag(player)
         }
+        if (new Database().get('lbdtoggle') === 1) {
+        const leaderboardCordX = parseInt(getDefaultScoreboard().x);
+        const leaderboardCordY = parseInt(getDefaultScoreboard().y);
+        const leaderboardCordZ = parseInt(getDefaultScoreboard().z);
+        world.getDimension('overworld').spawnParticle('uac:title_icon', { x: leaderboardCordX, y: leaderboardCordY + 3, z: leaderboardCordZ });
+        }
     } catch (error) {
         console.warn(`Error while running the main section: ${error}\n$${error.stack}`);
     }
 });
 
-system.runInterval(() => {
+Server.runInterval(() => {
     writeLeaderboard();
-}, 60);
+}, 9);
 
-system.runInterval(() => {
+Server.runInterval(() => {
     for (const player of world.getAllPlayers()) {
         if (player.hasTag('fzplr')) {
             if (player.hasTag('staffstatus')) { return player.removeTag('fzplr'); }

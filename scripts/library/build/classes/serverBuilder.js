@@ -1,9 +1,9 @@
-import { world } from '@minecraft/server';
+import { system, world } from '@minecraft/server';
 import { EventEmitter } from './eventEmitter.js';
 const overworld = world.getDimension('overworld');
 export class ServerBuilder extends EventEmitter {
     /**
-    * Forcefully shuts down the server.
+    * Forcefully shuts down the server. No longer works :(
     * @example ServerBuilder.close();
     */
 
@@ -27,7 +27,18 @@ export class ServerBuilder extends EventEmitter {
     broadcast(text) {
         return world.sendMessage(text)
     };
-    
+
+    /**
+     * 
+     * @param {Function} fn 
+     * @param {Number} ticks
+     * @returns {Number}
+     */
+    runInterval(fn, ticks) {
+        const runId = system.runInterval(fn, ticks);
+        return runId;
+    }
+
     broadcastStaff(text, player) {
         return this.runCommandAsync(`tellraw ${player ? `"${player}"` : '@a[tag=staffstatus]'} {"rawtext":[{"text":${JSON.stringify(text)}}]}`);
     }
