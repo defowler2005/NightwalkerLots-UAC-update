@@ -17,7 +17,7 @@ import '../modules/world_border.js';
 import { afk_kick } from '../modules/afk_kick.js';
 import { Check_Packet_Behavior } from '../modules/bad_packet.js';
 //game resource dependancies
-import { tellrawStaff, tellrawServer, TellRB } from '../library/utils/prototype.js';
+import { tellrawStaff, tellrawServer, TellRB, getGamemode } from '../library/utils/prototype.js';
 import { world, Player, system, BlockPermutation } from '@minecraft/server';
 import { Database, Server } from '../library/Minecraft.js';
 import '../library/miscellaneous/chatrank.js';
