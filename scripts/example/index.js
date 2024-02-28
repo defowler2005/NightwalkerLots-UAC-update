@@ -33,7 +33,7 @@ function scoreTest(target, objective) {
     }
 };
 
-const overworld = world.getDimension('overworld');
+//const overworld = world.getDimension('overworld');
 
 function worldBorder(player) {
     const { x, y, z } = player.location;
@@ -108,10 +108,10 @@ Server.runInterval(() => {
             creative_flag(player)
         }
         if (new Database().get('lbdtoggle') === 1) {
-        const leaderboardCordX = parseInt(getDefaultScoreboard().x);
-        const leaderboardCordY = parseInt(getDefaultScoreboard().y);
-        const leaderboardCordZ = parseInt(getDefaultScoreboard().z);
-        world.getDimension('overworld').spawnParticle('uac:title_icon', { x: leaderboardCordX, y: leaderboardCordY + 3, z: leaderboardCordZ });
+            const leaderboardCordX = parseInt(getDefaultScoreboard().x);
+            const leaderboardCordY = parseInt(getDefaultScoreboard().y);
+            const leaderboardCordZ = parseInt(getDefaultScoreboard().z);
+            world.getDimension('overworld').spawnParticle('uac:title_icon', { x: leaderboardCordX, y: leaderboardCordY + 3, z: leaderboardCordZ });
         }
     } catch (error) {
         console.warn(`Error while running the main section: ${error}\n$${error.stack}`);
@@ -352,7 +352,7 @@ world.beforeEvents.playerBreakBlock.subscribe(({ block, dimension, player }) => 
         alert = 0;
         tellrawStaff(`§l§¶§cUAC ► §6Anti-Nuker §btemp kicked §d${player.getName()} §bfor Nuker Attempt`);
         try { player.runCommand(`kick "${player.nameTag}" §r\n§l§c\n§r\n§eKicked By:§r §l§3§•Unity Anti•Cheat§r\n§bReason:§r §c§lNuker Attempt`); }
-        catch { player.runCommand(`event entity @s uac:ban_main`); }
+        catch { player.runCommand(`event entity @s uac:ban_main`); };
     }
     dimension
         .getBlock(block.location)
