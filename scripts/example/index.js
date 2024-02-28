@@ -8,6 +8,7 @@ import { ops } from '../modules/oneplayersleep.js';
 import '../modules/lagclear.js';
 import '../modules/on_death.js';
 import '../modules/anti_cbe.js';
+import '../modules/illegal_item.js';
 import { movement_check } from '../modules/movement.js';
 import { waitMove } from './commands/staff/gui.js';
 import { hotbar_message } from '../modules/hotbar_message.js';
