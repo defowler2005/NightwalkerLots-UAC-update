@@ -23,6 +23,7 @@ import { Database, Server } from '../library/Minecraft.js';
 import '../library/miscellaneous/chatrank.js';
 import { creative_flag } from '../modules/creative_flag.js';
 import { getDefaultScoreboard, writeLeaderboard } from '../library/miscellaneous/leaderboard.js';
+import { illegalItem } from '../modules/illegal_item.js';
 
 function scoreTest(target, objective) {
     try {
@@ -82,10 +83,7 @@ Server.runInterval(() => {
             for (let player of players) {
                 const name = player.getName();
                 worldBorder(player);
-                const unbantoggle = new Database();
-                if (unbantoggle.get('ubwtoggle') === 0) {
-                    playerbans(player);
-                };
+                playerbans(player);
                 hotbar_message(player);
                 movement_check(player);
                 creative_flag(player);
@@ -106,7 +104,7 @@ Server.runInterval(() => {
         }
         for (let player of world.getPlayers()) {
             Check_Packet_Behavior(player);
-            creative_flag(player)
+            illegalItem(player);
         }
         if (new Database().get('lbdtoggle') === 1) {
             const leaderboardCordX = parseInt(getDefaultScoreboard().x);
@@ -186,9 +184,8 @@ world.beforeEvents.playerPlaceBlock.subscribe(({ block, player }) => {
         if (block.type.id in unobtainables && uoimbool === 1 && player.hasTag(`staffstatus`) === false) {
             TellRB(`flag_1`, `UAC Unobtainable Items ► ${player.nameTag} tried to place ${block.type.id.replace('minecraft:', '')} at ${x} ${y} ${z}`);
             tellrawStaff(`§l§¶§cUAC STAFF ► §6Unobtainable Items §bBlock Placement Flag \nBlock Type §7: §c${block.type.id.replace('minecraft:', '')} §bBlock Placer §7: §c${player.nameTag} §bLocation §7: §c${x} ${y} ${z}`);
-            let type = block.type.id.replace('minecraft:', '');
+            const type = block.type.id.replace('minecraft:', '');
             block.setPermutation(BlockPermutation.resolve('minecraft:air'));
-            player.sendMessage('Illegal item!');
             tellrawServer(`§¶§c§lUAC ► §6Unobtainable Items §d${player.nameTag} §bwas temp-kicked for having §c${type}`);
             player.runCommandAsync(`clear @s`);
             try { player.runCommandAsync(`kick "${player.nameTag}" §r\n§l§c\n§r\n§eKicked By:§r §l§3§•Unity Anti•Cheat§r\n§bReason:§r §c§lUnobtainable Items | ${type}`); }
@@ -260,7 +257,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
             data.sender.tellraw(`§¶§c§lUAC ► §bYou are currently muted.`);
             return;
         };
-
         new Database(data.sender).set('lastMessageTime', currentTime);
     } catch (error) {
         return console.warn(`${error}, ${error.stack}`);
@@ -268,14 +264,14 @@ world.beforeEvents.chatSend.subscribe((data) => {
 });
 
 /** 
- * The log of the players break times
- * @type {Object<Player.name: number>}
+ * The log of the players' break times
+ * @type {Object<string, number>}
  */
 const log = {};
 
 /**
  * Allow staff to be whitelisted
- * @type {string}
+ * @type {String}
  */
 const byPassTag = "staffstatus";
 let alert = 0;
@@ -357,7 +353,7 @@ world.beforeEvents.playerBreakBlock.subscribe(({ block, dimension, player }) => 
     }
     dimension
         .getBlock(block.location)
-        .setPermutation(block.setPermutation());
+        .setPermutation(block.setPermutation(block.type.id));
     dimension
         .getEntitiesAtBlockLocation(block.location)
         .filter((entity) => entity.id === "minecraft:item")
@@ -373,4 +369,3 @@ system.beforeEvents.watchdogTerminate.subscribe((beforeWatchdogTerminate) => {
     tellrawStaff(`§l§¶§cUAC STAFF ► §6SYSTEM §c§lPrevented WatchDog Termination`);
     beforeWatchdogTerminate.cancel = true;
 });
-
