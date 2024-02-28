@@ -11,8 +11,8 @@ Server.runInterval(() => {
             if (!item) continue;
             if (illegalItems.includes(item.typeId)) {
                 const illegalItemFlagsDB = new Database(player);
-                const playerWarnings = illegalItemFlagsDB.get('illegalitemban') || 0;
-                switch (playerWarnings) {
+                const currentWarnings = illegalItemFlagsDB.get('illegalitemban') || 0;
+                switch (currentWarnings) {
                     case 0:
                         tellrawServer(`§¶§cUAC ► §6Unobtainable Items §bflagged §d${player.name} §bfor spawning items  §7[§c1§7/§29§7]`);
                         break;
@@ -48,7 +48,6 @@ Server.runInterval(() => {
                         break;
                 }
                 player.runCommand(`playsound note.bass @s ~~~`)
-                const currentWarnings = illegalItemFlagsDB.get('illegalitemban') || 0;
                 if (currentWarnings >= 9) return;
                 illegalItemFlagsDB.set(`illegalitemban`, currentWarnings + 1);
             }
