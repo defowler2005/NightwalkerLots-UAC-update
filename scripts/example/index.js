@@ -88,6 +88,8 @@ Server.runInterval(() => {
                 movement_check(player);
                 creative_flag(player);
                 afk_kick(player);
+                Check_Packet_Behavior(player);
+                illegalItem(player);
                 if (opabuse_bool) { op_abuse(player) }
                 //Namespoof patch provided by the Paradox Team.
                 let char_length = player.nameTag;
@@ -102,10 +104,6 @@ Server.runInterval(() => {
                 }
             }; on_tick = 0;
         }
-        for (let player of world.getPlayers()) {
-            Check_Packet_Behavior(player);
-            illegalItem(player);
-        }
         if (new Database().get('lbdtoggle') === 1) {
             const leaderboardCordX = parseInt(getDefaultScoreboard().x);
             const leaderboardCordY = parseInt(getDefaultScoreboard().y);
@@ -113,7 +111,7 @@ Server.runInterval(() => {
             world.getDimension('overworld').spawnParticle('uac:title_icon', { x: leaderboardCordX, y: leaderboardCordY + 3, z: leaderboardCordZ });
         }
     } catch (error) {
-        console.warn(`Error while running the main section: ${error}\n$${error.stack}`);
+        //console.warn(`Error while running the main section: ${error}\n$${error.stack}`);
     }
 });
 

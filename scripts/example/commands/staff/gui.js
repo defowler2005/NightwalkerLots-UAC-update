@@ -2,7 +2,8 @@ import { Player, system, world } from '@minecraft/server';
 import { Database, Server } from '../../../library/Minecraft.js';
 import { ActionFormData, ModalFormData } from '@minecraft/server-ui';
 import { setScore } from '../../../library/utils/score_testing.js';
-import { tellrawStaff, getGamemode } from '../../../library/utils/prototype.js';
+import { tellrawStaff, getGamemode, tellrawServer } from '../../../library/utils/prototype.js';
+import { getDefaultScoreboard } from '../../../library/miscellaneous/leaderboard.js';
 const obj = 'UNDEFINED'
 
 function scoreTest(target, objective) {
@@ -223,6 +224,7 @@ const guiScheme = {
             ['Kits', plr => guiScheme.kits(plr)],
             ['Particles', plr => guiScheme.particles(plr)],
             ['World Border', plr => guiScheme.worldborder(plr)],
+            ['Leaderboard', plr => guiScheme.leaderboard(plr)],
             ['Player Command', plr => guiScheme.pcmd['new'](plr)],
             ['More', plr => guiScheme.more(plr)],
             ['Close', plr => { }],
@@ -718,11 +720,22 @@ const guiScheme = {
             ['Vanish', plr => plr.runCommandAsync('function UAC/vanish')],
             ['Auto Totem', plr => plr.runCommandAsync('function UAC/autototem')],
             ['Godmode', plr => plr.runCommandAsync('function UAC/tgm')],
-            ['Fake Leave', plr => plr.runCommandAsync('function UAC/fakeleave')],
-            ['Credits', plr => plr.runCommandAsync('function UAC/credit')],
+            ['Fake Leave', plr => tellrawServer(`§e${plr.name} left the realm.`)],
+            ['Credits', plr => {
+                let creditString = [];
+                creditString.push('§¶§cUAC ► §7[ §bUnity Anti-Cheat §2v2.8.9 §7]');
+                creditString.push('§¶§cUAC ► §bCredit to the following people for helping development§7:');
+                creditString.push('§¶§cUAC ► §dCarthe123 §7|§d HD Blooms §7|§d MR Patches §7|§d NightwalkerLots §7|§d UnknownCatastrophe');
+                creditString.push('§¶§cUAC ► §bCredit to §dxFallen54x §bfor help on framework for the UAC GUI system');
+                creditString.push('§¶§cUAC ► §bCredit to §dSmoothie §bfor help on Anti-Crasher');
+                creditString.push('§¶§cUAC ► §bCredit to §dSamster 10 §bfrom youtube for letting us reference their AFK system');
+                creditString.push('§¶§cUAC ► §bCredit to §dRoman Mender §bfor creating the original base code §7{§c Hydra Anti§7-§cCheat §7}');
+                creditString.push('§¶§cUAC ► §bCredit to §dnotbeer §bfor creating the base for the Custom Commands');
+                //creditString.push('§¶§cUAC ► §bCredit to §ddefowler2OO5 §bfor fixing/updating §cUAC§b for 1.20.60');
+                plr.tellraw(creditString.join('\n§r'));
+            }],
             ['Back', plr => guiScheme.main(plr)],
         ]
-
         const v = new ActionFormData()
             .title('Unity Anticheat')
 
@@ -919,6 +932,37 @@ const guiScheme = {
             guiScheme.worldborder(plr);
         })
     })(),
+    /** @type { (plr: Player) => void } */
+    lbchange: (() => { // leaderboard change UI
+        const v = new ModalFormData()
+            .title('Leaderboard')
+            .textField('Enter a new X leaderboard location. Leave blank to cancel', 'Leaderboard distance (number)')
+            .textField('Enter a new Y leaderboard location. Leave blank to cancel', 'Leaderboard distance (number)')
+            .textField('Enter a new Z leaderboard location. Leave blank to cancel', 'Leaderboard distance (number)')
+    
+        return (plr) => void v.show(plr).then(v => {
+            if (v.canceled || !v.formValues[0]) return guiScheme.leaderboard(plr)
+    
+            let newValueX = Number(v.formValues[0]);
+            let newValueY = Number(v.formValues[1]);
+            let newValueZ = Number(v.formValues[2]);
+    
+            if (isNaN(newValueX) || isNaN(newValueY) || isNaN(newValueZ)) return guiScheme.leaderboard(plr);
+    
+            const leaderboardDB = new Database();
+            leaderboardDB.set('leaderboard_coord_x', newValueX);
+            leaderboardDB.set('leaderboard_coord_y', newValueY);
+            leaderboardDB.set('leaderboard_coord_z', newValueZ);
+            
+            const existingLeaderboard = world.getDimension('overworld').getEntities({ type: 'uac:leaderboard' })[0];
+            if (existingLeaderboard) existingLeaderboard.kill();
+            
+            tellrawStaff(`§¶§cUAC STAFF ► §bPlayer §d${plr.name}§b has set the leaderboard location to X: §a${newValueX}§b, Y: §a${newValueY}§b, Z: §a${newValueZ}§r`);
+            
+            guiScheme.leaderboard(plr);
+        })
+    })(),
+    
 
     /** @type { (plr: Player) => void } */
     worldborder: (plr) => { // worldborder UI
@@ -940,6 +984,34 @@ const guiScheme = {
                 case 1: {
                     worldborderDb.set('wbmtoggle', status ? 0 : 1);
                     return guiScheme.worldborder(plr);
+                }
+                case 2: return guiScheme.main(plr)
+            }
+        })
+    },
+    leaderboard: (plr) => { // leaderboard UI
+        const leaderboard = new Database();
+        const leaderboardCordX = parseInt(getDefaultScoreboard().x);
+        const leaderboardCordY = parseInt(getDefaultScoreboard().y);
+        const leaderboardCordZ = parseInt(getDefaultScoreboard().z);
+        const lbdtoggleDB = new Database();
+        const status = lbdtoggleDB.get('lbdtoggle');
+        let v = new ActionFormData()
+            .title('Leaderboard')
+            .body([
+                `Status: ${status ? '§aENABLED' : '§cDISABLED'}§r`,
+                `Current distance: §c${leaderboardCordX}§r / §a${leaderboardCordY}§r / §9${leaderboardCordZ}`
+            ].join('\n§r'))
+            .button('Change distance')
+            .button('Change toggle')
+            .button('Back')
+        v.show(plr).then(v => {
+            if (v.canceled) return guiScheme.main(plr)
+            switch (v.selection) {
+                case 0: return guiScheme.lbchange(plr)
+                case 1: {
+                    leaderboard.set('lbdtoggle', status ? 0 : 1);
+                    return guiScheme.leaderboard(plr);
                 }
                 case 2: return guiScheme.main(plr)
             }
